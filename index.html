@@ -4,10 +4,10 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+		<title>React-Redux to Elm</title>
 
 		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/black.css">
+		<link rel="stylesheet" href="css/theme/solarized.css">
 
 		<!-- Theme used for syntax highlighting of code -->
 		<link rel="stylesheet" href="lib/css/zenburn.css">
@@ -24,8 +24,158 @@
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
+				<section>
+					<h1>React-Redux to Elm</h1>
+				</section>
+				<section>
+					<section>
+						<h2>Store</h2>
+						<p class="fragment">
+							The store keeps the state of the application
+						</p>
+					</section>
+					<section>
+						<h2>React-Redux</h2>
+						<p>The store comes from the default store parameter in the reducer or reducers</p>
+					</section>
+					<section>
+						<h2>Elm</h2>
+						<ul>
+							<li>Structure defined by the Model type</li>
+							<li>Initialized by the init function</li>
+							<li>Transformed by the update function</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Reducer</h2>
+						<p class="fragment">
+							Reducers transform the store in response to an action
+						</p>
+					</section>
+					<section>
+						<h2>React-Redux</h2>
+						<ul>
+							<li>Function that takes in the current store and action</li>
+							<li>Returns the transformed store</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Elm</h2>
+						<ul>
+							<li>Takes in the current store and a Msg</li>
+							<li>Returns a tuple containing the new store and a Cmd (Side Effect)</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Side Effects</h2>
+						<p>Any effect that is not purely reproducible</p>
+					</section>
+					<section>
+						<h2>React-Redux</h2>
+						<ul>
+							<li>Use the Thunk middleware to dispatch a function instead of an object</li>
+							<li>This keeps your reducer pure and moves side effects to the Thunk function</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Elm</h2>
+						<ul>
+							<li>Commands are used to do such things as AJAX and generating random numbers</li>
+							<li>Commands are given a Msg type as an argument, which they call the update function with</li>
+							<li>
+								For example, instead of a .then from a promise or a callback function
+								used to retrieve the result of an AJAX request, the result is passed
+								in a given Msg type, which is evaluated just like all other Msg types
+								in the update function
+							</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Component</h2>
+						<p>An abstract structure used to create HTML</p>
+					</section>
+					<section>
+						<h2>React-Redux</h2>
+						<ul>
+							<li>Can be either functional or a React class</li>
+							<li>App must be connected to the store using the Provider component</li>
+							<li>Each component must be connected to the store with the connect function to look at the store or dispatch actions to it</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Elm</h2>
+						<ul>
+							<li>Functional: Must return an Html Msg</li>
+							<li>No JSX formatting, uses only functions imported from the Html and Html.Attributes libraries</li>
+							<li>The view function is given the model when called, which it can then pass to any component functions</li>
+							<li>The view function must ultimately return an Html Msg</li>
+							<li>When a Msg is produced, it automatically gets sent to the update function</li>
+							<li>Msg's are produced through the on* attributes of an HTML element, imported from Html.Events</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>External Events</h2>
+						<p>Events which originate outside of the app, with no initiation from the app</p>
+						<i>WebSockets, not AJAX</i>
+					</section>
+					<section>
+						<h2>React-Redux</h2>
+						<ul>
+							<li>Middleware is suggested</li>
+							<li>Middleware can dispatch actions based on events outside of React-Redux</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Elm</h2>
+						<ul>
+							<li>Subscriptions are registered with a Msg type</li>
+							<li>When data comes in, it is attached to the Msg type given, and sent to the update function</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Breaking up a complex app</h2>
+						<p>
+							Sometimes apps get too big to put in one file. How are they split up?
+						</p>
+					</section>
+					<section>
+						<h2>React-Redux</h2>
+						<ul>
+							<li>Multiple reducers can be written and combined using combineReducers</li>
+							<li>Functionality is separated by store key</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Elm</h2>
+						<ul>
+							<li>Each section has it's own custom Msg type and update function, which it exports</li>
+							<li>The main Elm file will import all of the custom Msg types and update functions</li>
+							<li>Custom Msg types are unioned together using the pipe character</li>
+							<li>Custom update functions are called in the main update function, which uses a case statement on custom Msg type</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<h2>JS-Interop</h2>
+					<ul>
+						<li>Ports are created in Elm to send and receive data from other JavaScript</li>
+						<li>Flags can also be created for init-time configuration</li>
+						<li>Cmd's are created and sent to ports, just like emitting to a WebSocket</li>
+						<li>Subscriptions on ports allow new data to come in, like WebSockets</li>
+						<li>JS has to be connected to ports outside of the Elm app, usually as part of the script tag in the HTML</li>
+						<li>Data is sanitized coming in to Elm</li>
+					</ul>
+				</section>
 			</div>
 		</div>
 
