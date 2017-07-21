@@ -31,6 +31,9 @@
 						Show how many familiar features of React-Redux map to
 						features in Elm. The two are very similar, as Redux
 						was modeled after Elm.
+
+						I'm going to go through the concepts familar between
+						both of them, showing how they are similar and different.
 					</aside>
 				</section>
 				<section>
@@ -40,7 +43,6 @@
 							The store keeps the state of the application
 						</p>
 						<aside class="notes">
-							The common definition between Elm and React-Redux.
 							It can be read and transformed.
 						</aside>
 					</section>
@@ -61,7 +63,7 @@
 						<aside class="notes">
 							The Model type definition is not passed to the program,
 							just the init, update, subscription, and view functions.
-							The structure is defined as whatever the init function outputs
+							The structure of the store is defined as whatever the init function outputs
 							and the update function takes in and returns.
 						</aside>
 					</section>
@@ -141,9 +143,7 @@
 						</ul>
 						<aside class="notes">
 							You literally cannot put side effect producing code in your reducer, as all
-							side effects are handled with commands. When a Command wants to give you
-							a value back, it uses the Msg type you gave it to pass that value back
-							using the update function.
+							side effects are handled with commands.
 						</aside>
 					</section>
 				</section>
@@ -156,6 +156,7 @@
 						<h2>React-Redux</h2>
 						<ul>
 							<li>Can be either functional or a React class</li>
+							<li>JSX Formatting</li>
 							<li>App must be connected to the store using the Provider component</li>
 							<li>Each component must be connected to the store with the connect function to look at the store or dispatch actions to it</li>
 						</ul>
@@ -236,8 +237,9 @@
 						<aside class="notes">
 							This is very similar to React-Redux, the main
 							difference being that you have to manually
-							pass only the important section of the total
+							pass only the important sub-section of the total
 							model to each update function in the case statement.
+							React-Redux does this for you in combineReducers.
 						</aside>
 					</section>
 				</section>
