@@ -26,17 +26,30 @@
 			<div class="slides">
 				<section>
 					<h1>React-Redux to Elm</h1>
+					<i>https://cakenggt.github.io/react-redux-to-elm</i>
+					<aside class="notes">
+						Show how many familiar features of React-Redux map to
+						features in Elm. The two are very similar, as Redux
+						was modeled after Elm.
+					</aside>
 				</section>
 				<section>
 					<section>
 						<h2>Store</h2>
-						<p class="fragment">
+						<p>
 							The store keeps the state of the application
 						</p>
+						<aside class="notes">
+							The common definition between Elm and React-Redux.
+							It can be read and transformed.
+						</aside>
 					</section>
 					<section>
 						<h2>React-Redux</h2>
 						<p>The store comes from the default store parameter in the reducer or reducers</p>
+						<aside class="notes">
+							If using combineReducers, the structure is gotten from the input map
+						</aside>
 					</section>
 					<section>
 						<h2>Elm</h2>
@@ -45,14 +58,25 @@
 							<li>Initialized by the init function</li>
 							<li>Transformed by the update function</li>
 						</ul>
+						<aside class="notes">
+							The Model type definition is not passed to the program,
+							just the init, update, subscription, and view functions.
+							The structure is defined as whatever the init function outputs
+							and the update function takes in and returns.
+						</aside>
 					</section>
 				</section>
 				<section>
 					<section>
 						<h2>Reducer</h2>
-						<p class="fragment">
+						<p>
 							Reducers transform the store in response to an action
 						</p>
+						<aside class="notes">
+							When we say transform, we actually mean that a new store is returned.
+							In Elm this is taken care of with Immutable data types,
+							but in JavaScript we need to do this ourselves.
+						</aside>
 					</section>
 					<section>
 						<h2>React-Redux</h2>
@@ -67,18 +91,40 @@
 							<li>Takes in the current store and a Msg</li>
 							<li>Returns a tuple containing the new store and a Cmd (Side Effect)</li>
 						</ul>
+						<aside class="notes">
+							React-Redux has no built-in ability to deal with side-effects while
+							still keeping it's reducers pure like Elm does.
+							We have to use third party libraries.
+						</aside>
 					</section>
 				</section>
 				<section>
 					<section>
 						<h2>Side Effects</h2>
-						<p>Any effect that is not purely reproducible</p>
+						<p>Anything outside of a pure function</p>
+						<aside class="notes">
+							A pure function is defined as
+
+							<ol>
+								<li>Always evaluates the same result value given the same argument value(s).</li>
+								<li>Causes no side effect, such as mutation or I/O</li>
+							</ol>
+
+							Programs usually have to have Side Effects, and React-Redux
+							and Elm handle their creation differently. The goal is not to
+							not have side effects, but to isolate any side effect producing
+							code as much as possible.
+						</aside>
 					</section>
 					<section>
 						<h2>React-Redux</h2>
 						<ul>
 							<li>Use the Thunk middleware to dispatch a function instead of an object</li>
-							<li>This keeps your reducer pure and moves side effects to the Thunk function</li>
+							<li>This keeps your reducer pure and moves side effect creation to the Thunk function</li>
+							<aside class="notes">
+								It is still up to the developer to keep side effect producing
+								code out of their reducer, moving it into the Thunk.
+							</aside>
 						</ul>
 					</section>
 					<section>
@@ -93,6 +139,12 @@
 								in the update function
 							</li>
 						</ul>
+						<aside class="notes">
+							You literally cannot put side effect producing code in your reducer, as all
+							side effects are handled with commands. When a Command wants to give you
+							a value back, it uses the Msg type you gave it to pass that value back
+							using the update function.
+						</aside>
 					</section>
 				</section>
 				<section>
@@ -118,6 +170,12 @@
 							<li>When a Msg is produced, it automatically gets sent to the update function</li>
 							<li>Msg's are produced through the on* attributes of an HTML element, imported from Html.Events</li>
 						</ul>
+						<aside class="notes">
+							The biggest difference between these two is that with Elm
+							you don't have to set up the connections between the
+							components and the store manually, it is handled for
+							you.
+						</aside>
 					</section>
 				</section>
 				<section>
@@ -125,6 +183,11 @@
 						<h2>External Events</h2>
 						<p>Events which originate outside of the app, with no initiation from the app</p>
 						<i>WebSockets, not AJAX</i>
+						<aside class="notes">
+							AJAX is initiated by the code, so the code expects
+							some sort of result or error value. However, WebSockets
+							can emit events without any interaction from your side.
+						</aside>
 					</section>
 					<section>
 						<h2>React-Redux</h2>
@@ -139,6 +202,12 @@
 							<li>Subscriptions are registered with a Msg type</li>
 							<li>When data comes in, it is attached to the Msg type given, and sent to the update function</li>
 						</ul>
+						<aside class="notes">
+							You say what you want to subscribe to, and give it one
+							of your Msg types that it will dispatch when it receives
+							an event. If you want something to happen every second,
+							or to evaluate a WebSocket emit, you use subscriptions.
+						</aside>
 					</section>
 				</section>
 				<section>
@@ -151,18 +220,25 @@
 					<section>
 						<h2>React-Redux</h2>
 						<ul>
-							<li>Multiple reducers can be written and combined using combineReducers</li>
+							<li>Multiple reducers can be combined using combineReducers</li>
 							<li>Functionality is separated by store key</li>
 						</ul>
 					</section>
 					<section>
 						<h2>Elm</h2>
 						<ul>
-							<li>Each section has it's own custom Msg type and update function, which it exports</li>
-							<li>The main Elm file will import all of the custom Msg types and update functions</li>
+							<li>Each section has it's own custom Msg type, Model type, and update function, which it exports</li>
+							<li>The main Elm file will import all of the custom Msg types, Models, and update functions</li>
 							<li>Custom Msg types are unioned together using the pipe character</li>
+							<li>Custom Models are combined into the main model type using a map with keys</li>
 							<li>Custom update functions are called in the main update function, which uses a case statement on custom Msg type</li>
 						</ul>
+						<aside class="notes">
+							This is very similar to React-Redux, the main
+							difference being that you have to manually
+							pass only the important section of the total
+							model to each update function in the case statement.
+						</aside>
 					</section>
 				</section>
 				<section>
@@ -170,11 +246,15 @@
 					<ul>
 						<li>Ports are created in Elm to send and receive data from other JavaScript</li>
 						<li>Flags can also be created for init-time configuration</li>
-						<li>Cmd's are created and sent to ports, just like emitting to a WebSocket</li>
-						<li>Subscriptions on ports allow new data to come in, like WebSockets</li>
+						<li>Cmd's are created and sent to ports</li>
+						<li>Subscriptions on ports allow new data to come in</li>
 						<li>JS has to be connected to ports outside of the Elm app, usually as part of the script tag in the HTML</li>
 						<li>Data is sanitized coming in to Elm</li>
 					</ul>
+					<aside class="notes">
+						This is exactly like sending and receiving messages
+						from a WebSocket.
+					</aside>
 				</section>
 			</div>
 		</div>
